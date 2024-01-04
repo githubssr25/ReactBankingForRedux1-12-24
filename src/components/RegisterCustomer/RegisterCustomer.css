@@ -1,0 +1,52 @@
+
+.register-customer-form{
+    width: 10%; /* Adjust the width based on your preference */
+    padding: 10px; /* Add padding for better visual appearance */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    /* Add more styles as needed */
+  }
+
+  .register-customer-form .mb-3 {
+    /* Add styles for Form.Group with margin-bottom */
+
+    width: 10%; /* Adjust the width based on your preference */
+    padding: 10px; /* Add padding for better visual appearance */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    /* Add more styles as needed */
+  }
+  
+  .register-customer-form label {
+    /* Add styles for Form.Label */
+
+    width: 10%; /* Adjust the width based on your preference */
+    padding: 10px; /* Add padding for better visual appearance */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    /* Add more styles as needed */
+  }
+  
+  .register-customer-form input {
+    /* Add styles for Form.Control of type "text" or "email" */
+
+    width: 10%; /* Adjust the width based on your preference */
+    padding: 10px; /* Add padding for better visual appearance */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    /* Add more styles as needed */
+  }
+  
+  .register-customer-form textarea {
+    /* Add styles for Form.Control with as="textarea" */
+
+    width: 10%; /* Adjust the width based on your preference */
+    padding: 10px; /* Add padding for better visual appearance */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    /* Add more styles as needed */
+  }
+  
+  .register-customer-form .btn-primary {
+    /* Add styles for the primary Button variant */
+
+    width: 10%; /* Adjust the width based on your preference */
+    padding: 10px; /* Add padding for better visual appearance */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    /* Add more styles as needed */
+  }

@@ -1,0 +1,16 @@
+.welcome-box {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    margin: 20px;
+  }
+  
+  .welcome-box h1 {
+    color: #333;
+  }
+  
+  .welcome-box p {
+    color: #555;
+  }
