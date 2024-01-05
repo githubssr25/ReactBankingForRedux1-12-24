@@ -1,5 +1,5 @@
+
 import axios from "axios";
-import { loginAxn } from "../actions/userActions";
 const createInstance = () => axios.create({baseURL: 'http://localhost:9000/api'});
 const deleteBankAccount = async (bankAccountID, callback) => {
   try {
@@ -14,8 +14,7 @@ const deleteBankAccount = async (bankAccountID, callback) => {
   }
 };
 
-// whomever calls the service is component who needs it. when use dispatch we will call login action 
-const login = async (customerID, pin, dispatch, callback) => {
+const login = async (customerID, pin, callback) => {
     try {
       const response =  await axios.post("http://localhost:9000/api/auth/login", {customerID: customerID, pin: pin});
       const { token } = response.data;
@@ -34,31 +33,4 @@ const login = async (customerID, pin, dispatch, callback) => {
     }
 };
 
-// Modify your services/api-service.js file to include a registration function
-
-const registerAccountTest = async (customerID, isSavings, callback) => {
-  console.log(customerID);
-  console.log("Is Savings:", isSavings);
-  try {
-    const response = await axios.post(
-      "http://localhost:9000/api/bank-account/addAccount",
-      {
-        customerID: customerID,
-        isSavings: isSavings,
-      }
-    );
-    const { token } = response.data;
-    axios.defaults.headers.common = { Authorization: `Bearer ${token}` };
-    console.log(axios.defaults.headers.common);
-    console.log(token, "bank account successfully registered");
-    callback();
-  } catch (error) {
-    console.error("Login failed", error);
-  }
-};
-
-
-
-
-
-export { createInstance, deleteBankAccount, registerAccountTest, login};
+export { login }; 

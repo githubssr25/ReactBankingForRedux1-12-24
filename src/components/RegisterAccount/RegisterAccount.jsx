@@ -1,31 +1,34 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { Stack, Container, Row, Col } from "react-bootstrap";
-import { registerAccountTest } from "../../services/api-service";
-import { dispatch } from "redux";
-import { registerAccountAxn } from "../../actions/userActions";
-import { useDispatch, useSelector } from "react-redux";
-import { setBalance, setAccountType } from "../../actions/bankAccountActions";
 
-const RegisterAccount = ({ handleSuccessfulRegister }) => {
-  const dispatch = useDispatch();
+const RegisterAccount = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isSavings, setSavings] = useState(true);
-
-  const { accountType, isAccountRegistered } = useSelector(
-    (state) => state.bankAccount
-  );
-
   useEffect(() => {
-    const onSuccessfulRegisterAccount = () => {
-      dispatch(setBalance(0));
-      handleSuccessfulRegister();
-    };
-    registerAccountTest(username, isSavings, onSuccessfulRegisterAccount);
-  }, [dispatch, username, isSavings, handleSuccessfulRegister]);
+    apiTest();
+  }, []);
 
-  // leave the dpeendnecy array empty or not?
+  const apiTest = async (event) => {
+    console.log("Event:", event);
+    console.log(username);
+    console.log(password);
+    try {
+      const response = await axios.post(
+        "http://localhost:9000/api/authentication/register/",
+        {
+          customerID: 1234,
+          pin: 2073,
+        }
+      );
+
+      const { token } = response.data;
+      axios.defaults.headers.common = { Authorization: `Bearer ${token}` };
+      console.log(axios.defaults.headers.common);
+    } catch (error) {
+      console.error("Login failed", error);
+    }
+  };
 
   return (
     <Container>
