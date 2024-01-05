@@ -11,11 +11,6 @@ import NoPage from "./components/NoPage/NoPage";
 
 function App() {
   const [count, setCount] = useState(0);
-
-  //  <Route index element={<Home />} /> the index just means the normal / index just means / for path thats why we dont specifcy path
-  // type tab after home will import location of it 828
-
-  // browser router what it does is it helps you route to diff components
   return (
     <>
       <BrowserRouter>
