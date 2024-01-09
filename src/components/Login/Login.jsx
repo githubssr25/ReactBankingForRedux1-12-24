@@ -6,7 +6,6 @@ import { Container, Row, Col, Form, Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { login } from "../../services/api-service";
-import axios from "axios";
 
 const SuccessfulModal = ({ show }) => {
   const [showing, setShowing] = useState(show);
@@ -14,7 +13,7 @@ const SuccessfulModal = ({ show }) => {
   useEffect(() => {
     setTimeout(() => {
       setShowing(false);
-    }, 1500);
+    }, 3000);
   }, []);
 
   return (
@@ -32,12 +31,20 @@ const SuccessfulModal = ({ show }) => {
   );
 };
 
-const Login = () => {
+const Login = ({ handleSuccessfulLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [saveUsername, setSaveUsername] = useState(false);
   const navigate = useNavigate();
-  const [showModal, setModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const onSuccessfulLogin = () => {
+      handleSuccessfulLogin();
+      setShowModal(true);
+    };
+    login(username, password, onSuccessfulLogin);
+  }, []);
 
   return (
     <div>

@@ -2,34 +2,22 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { Stack, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
+import {
+  registerAccountTest,
+  registerAccount,
+} from "../../services/api-service";
 
-const RegisterAccount = () => {
+const RegisterAccount = ({ handleSuccessfulRegister }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isSavings, setSavings] = useState(true); // Default to savings
   useEffect(() => {
-    apiTest();
+    const onSuccessfulRegisterAccount = () => {
+      handleSuccessfulRegister();
+    };
+    registerAccountTest(username, isSavings, onSuccessfulRegisterAccount);
   }, []);
-
-  const apiTest = async (event) => {
-    console.log("Event:", event);
-    console.log(username);
-    console.log(password);
-    try {
-      const response = await axios.post(
-        "http://localhost:9000/api/authentication/register/",
-        {
-          customerID: 1234,
-          pin: 2073,
-        }
-      );
-
-      const { token } = response.data;
-      axios.defaults.headers.common = { Authorization: `Bearer ${token}` };
-      console.log(axios.defaults.headers.common);
-    } catch (error) {
-      console.error("Login failed", error);
-    }
-  };
+  // leave the dpeendnecy array empty or not?
 
   return (
     <Container>
@@ -45,7 +33,7 @@ const RegisterAccount = () => {
           >
             <h2>Register a Customer Below</h2>
           </div>
-          <form onSubmit={apiTest}>
+          <form onSubmit={registerAccount}>
             <Stack gap={2}>
               <div className="form1">Create CustomerID</div>
               <span>
@@ -70,6 +58,27 @@ const RegisterAccount = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <div style={{ marginTop: "25px" }}>
+                <span>Select Account Type:</span>
+                <label>
+                  <input
+                    type="radio"
+                    value="savings"
+                    checked={isSavings}
+                    onChange={() => setSavings(true)}
+                  />
+                  Savings
+                </label>
+                <label style={{ marginLeft: "15px" }}>
+                  <input
+                    type="radio"
+                    value="checking"
+                    checked={!isSavings}
+                    onChange={() => setSavings(false)}
+                  />
+                  Checking
+                </label>
+              </div>
               <input type="submit" value="Register" />
             </Stack>
           </form>

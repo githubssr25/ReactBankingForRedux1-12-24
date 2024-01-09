@@ -1,8 +1,12 @@
 import React from "react";
 import { Outlet, Link } from "react-router-dom";
+import { useState } from "react";
 import Stack from "react-bootstrap/Stack";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
+import { Button } from "react-bootstrap";
+import { Login } from "/components/Login";
+import { RegisterAccount } from "/components/RegisterAccount";
 // this import outlet, link, react router dom allows you to re direct to a diff link
 
 // can type in rafce to get this
@@ -94,15 +98,84 @@ function UncontrolledExample() {
 // </h1>
 
 const CombinedHome = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isCreated, setIsCreated] = useState(false);
+  // Function to handle act   ws2 ions after successful login
+  const handleSuccessfulLogin = () => {
+    setIsAuthenticated(true);
+  };
+  const handleSuccessfulRegister = () => {
+    setIsCreated(true);
+  };
+
+  // Placeholder functions for different actions
+  const handleSeeBalance = () => {
+    // Implement logic to display the user's balance
+    console.log("See Balance button clicked!");
+  };
+
+  const handleDeposit = () => {
+    // Implement logic for depositing money
+    console.log("Deposit button clicked!");
+  };
+
+  const handleWithdraw = () => {
+    // Implement logic for withdrawing money
+    console.log("Withdraw button clicked!");
+  };
+
+  const handleTransfer = () => {
+    // Implement logic for transferring money to another account
+    console.log("Transfer button clicked!");
+  };
+
+  const handleViewTransferHistory = () => {
+    // Implement logic to view transfer history
+    console.log("View Transfer History button clicked!");
+  };
+
   return (
     <div>
       <WelcomeBox />
       <div style={{ margin: "50px" }}>
         <UncontrolledExample />
       </div>
-      <div style={{ margin: "10px 20px 30px 40px" }}>
-        <BasicExample />
-      </div>
+      {isAuthenticated ? (
+        <div>
+          {/* Display the authenticated content here */}
+          <h2>Welcome! What would you like to do?</h2>
+          <Button onClick={handleSeeBalance}> See Balance </Button>
+          <Button onClick={handleDeposit}> Deposit $$ into Account </Button>
+          <Button onClick={handleWithdraw}> Withdraw $$ from Account </Button>
+          <Button onClick={handleTransfer}>
+            {" "}
+            Transfer $$ to Another Account
+          </Button>
+          <Button onClick={handleViewTransferHistory}>
+            {" "}
+            View Transfer History
+          </Button>
+          <Button onClick={() => setIsAuthenticated(false)}> Log Out </Button>
+        </div>
+      ) : isCreated ? (
+        <div style={{ margin: "10px 20px 30px 40px" }}>
+          <h2>
+            Congratulations! You have successfully registered your account.
+          </h2>
+          <Button onClick={() => setIsCreated(false)}>
+            Register Another Account
+          </Button>
+          <Button onClick={() => setIsCreated(false)}>Try Logging In</Button>
+        </div>
+      ) : (
+        <div style={{ margin: "10px 20px 30px 40px" }}>
+          <Login handleSuccessfulLogin={handleSuccessfulLogin} />
+          <RegisterAccount
+            handleSuccessfulRegister={handleSuccessfulRegister}
+          />
+          <BasicExample />
+        </div>
+      )}
     </div>
   );
 };
