@@ -4,18 +4,27 @@ import { Stack, Container, Row, Col } from "react-bootstrap";
 import { registerAccountTest } from "../../services/api-service";
 import { dispatch } from "redux";
 import { registerAccountAxn } from "../../actions/userActions";
+import { useDispatch, useSelector } from "react-redux";
+import { setBalance, setAccountType } from "../../actions/bankAccountActions";
 
 const RegisterAccount = ({ handleSuccessfulRegister }) => {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isSavings, setSavings] = useState(true);
+
+  const { accountType, isAccountRegistered } = useSelector(
+    (state) => state.bankAccount
+  );
+
   useEffect(() => {
     const onSuccessfulRegisterAccount = () => {
-      dispatch(registerAccountAxn(account.data));
+      dispatch(setBalance(0));
+      dispatch(setAccountType(isSavings ? "savings" : "checking"));
       handleSuccessfulRegister();
     };
     registerAccountTest(username, isSavings, onSuccessfulRegisterAccount);
-  }, []);
+  }, [dispatch, username, isSavings, handleSuccessfulRegister]);
 
   // leave the dpeendnecy array empty or not?
 

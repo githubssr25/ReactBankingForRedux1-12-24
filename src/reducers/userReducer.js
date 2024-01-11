@@ -3,7 +3,7 @@ import { ACTIONS } from "../actions/userActions";
 
 const initialState = {
     isLoggedIn: false,
-    isRegistered: false,
+    isCustomerRegistered: false,
     currentUser: {    
     role: null,
     token: null 
@@ -18,8 +18,6 @@ const userReducer = (state = initialState, action) => {
             // action.payload} its entire object of currentUser what you pass in at that time is what the payload is at that time 
         case ACTIONS.LOGOUT:
             return {...state, isLoggedIn: false, currentUser : null};
-        case ACTIONS.REGISTER_ACCOUNT:
-        return {...state, isAccountRegistered : true, currentUser: action.payload}
         case ACTIONS.REGISTER_CUSTOMER:
         return {...state, isCustomerRegistered : true, currentUser: action.payload}     
 

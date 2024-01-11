@@ -1,5 +1,5 @@
 export const ACTIONS = {LOGIN: 'LOGIN', LOGOUT:'LOGOUT', 
-REGISTER_CUSTOMER: 'REGISTER_CUSTOMER', REGISTER_ACCOUNT: 'REGISTER_ACCOUNT'};
+REGISTER_CUSTOMER: 'REGISTER_CUSTOMER'};
 
 export const loginAxn = (user) => ({
     type: ACTIONS.LOGIN,
@@ -13,10 +13,7 @@ type: ACTIONS.LOGOUT,
 
 });
 
-export const registerAccountAxn = (account) => ({
-    type: ACTIONS.REGISTER_ACCOUNT,
-    payload: account,
-  });
+
 
   export const registerCustomerAxn = (account) => ({
     type: ACTIONS.REGISTER_CUSTOMER,

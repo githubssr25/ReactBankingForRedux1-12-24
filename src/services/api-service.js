@@ -58,21 +58,7 @@ const registerAccountTest = async (customerID, isSavings, callback) => {
 };
 
 
-const registerCustomer = async (customerID, pin, callback) => {
-  try {
-    const response = await axios.post("http://localhost:9000/api/auth/register", {customerID: customerID, pin: pin});
-    // Assuming the server responds with relevant data after successful registration
-    const { token, customerID } = response.data;
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    console.log("Successful registration for customerID:", customerID);
-    callback();
-  } catch (error) {
-    console.error("Error during registration:", error);
-    throw error;
-  }
-};
 
 
 
-
-export { createInstance, deleteBankAccount, registerAccountTest, login, registerCustomer};
+export { createInstance, deleteBankAccount, registerAccountTest, login};

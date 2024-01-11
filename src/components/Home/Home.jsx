@@ -186,6 +186,8 @@ const Home = () => {
   );
 };
 
+export default Home;
+
 //         <div style={{ margin: "10px 20px 30px 40px" }}>
 //           <h2>
 //             Congratulations! You have successfully registered your account.
@@ -207,5 +209,3 @@ const Home = () => {
 //     </div>
 //   );
 // };
-
-export default Home;
