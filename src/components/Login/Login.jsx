@@ -52,8 +52,13 @@ const Login = ({ handleSuccessfulLogin }) => {
       handleSuccessfulLogin();
       setShowModal(true);
     };
-    login(username, password, onSuccessfulLogin);
-  }, []);
+
+    // Run the login logic only when username or password changes
+    // if truthy you do this but if falsy like if "" you dont
+    if (username && password) {
+      login(username, password, onSuccessfulLogin);
+    }
+  }, [username, password]);
 
   return (
     <div>

@@ -130,10 +130,16 @@ const Home = () => {
 
   return (
     <div>
-      <WelcomeBox />
-      <div style={{ margin: "50px" }}>
-        <UncontrolledExample />
-      </div>
+      {isAuthenticated || isCreated ? (
+        false
+      ) : (
+        <>
+          <WelcomeBox />
+          <div style={{ margin: "50px" }}>
+            <UncontrolledExample />
+          </div>
+        </>
+      )}
       {isAuthenticated ? (
         <div>
           {/* Display the authenticated content here */}
@@ -158,11 +164,19 @@ const Home = () => {
               <h2>
                 Congratulations! You have successfully registered your account.
               </h2>
-              <Button onClick={() => setIsCreated(false)}>
+              <Button onClick={() => setIsCreated(true)}>
                 Register Another Account
+                <WelcomeBox />
+                <div style={{ margin: "50px" }}>
+                  <UncontrolledExample />
+                </div>
               </Button>
               <Button onClick={() => setIsAuthenticated(true)}>
                 Click here to Try Logging In Now
+                <Login
+                  handleSuccessfulLogin={handleSuccessfulLogin}
+                  handleRegistrationError={handleRegistrationError}
+                />
               </Button>
             </div>
           ) : (
