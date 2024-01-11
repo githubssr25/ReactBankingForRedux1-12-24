@@ -5,7 +5,9 @@ import Accordion from "react-bootstrap/Accordion";
 import { Container, Row, Col, Form, Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+// import login from "../../services/api-service";
 import { login } from "../../services/api-service";
+import { useDispatch, useSelector } from "react-redux";
 
 const SuccessfulModal = ({ show }) => {
   const [showing, setShowing] = useState(show);
@@ -37,7 +39,25 @@ const Login = ({ handleSuccessfulLogin }) => {
   const [saveUsername, setSaveUsername] = useState(false);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const dispatch = useDispatch();
+  // login is API log in and this is going to
+  //     const onSuccessfulLogin = () => {
+  //   handleSuccessfulLogin();
+  //   setShowModal(true);
+  // };
+  // login(username, password, onSuccessfulLogin);
+  // //
+  // //
 
+  // so fro mteh store give me the user
+  const currentUserState = useSelector((state) => state.user.user);
+  const { currentUser, isLoggedIn } = currentUserState;
+
+  // root treducer will combine all reducers together so can have multiple states be managed and all be united at one point
+  // when we want to create another store how is that store going to know about other stores
+  // so inside of reducers we create a file called root reducer
+
+  // we have log in and dispatch is in app.js
   useEffect(() => {
     const onSuccessfulLogin = () => {
       handleSuccessfulLogin();
@@ -102,6 +122,9 @@ const Login = ({ handleSuccessfulLogin }) => {
             </Form>
           </Col>
         </Row>
+        {/* if the yare logged in show this successfulModal so import the values and allow us to see if they are logged in */}
+        {/* useSelectors is how to get info from store */}
+
         {showModal && <SuccessfulModal show={showModal} />}
       </Container>
     </div>
@@ -109,3 +132,5 @@ const Login = ({ handleSuccessfulLogin }) => {
 };
 
 export default Login;
+// default means only thing will be exprted so dont have to use deconstructor
+// so at top its just this now import login from "../../services/api-service";
