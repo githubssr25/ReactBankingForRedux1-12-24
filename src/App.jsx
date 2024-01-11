@@ -7,13 +7,8 @@ import RegisterCustomer from "./components/RegisterCustomer/RegisterCustomer";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NoPage from "./components/NoPage/NoPage";
 
-// App.jsx is like brain for react app it is the entry pt for the app
-
 function App() {
   const [count, setCount] = useState(0);
-  // have to have an initial state to look at because things can be slow and there has to be somethign that user has to have ability to vsiaully see in beginning so its same dea in redux
-
-  // there is a fall called app.jsx and it is being used in index.jsx
   return (
     <>
       <BrowserRouter>

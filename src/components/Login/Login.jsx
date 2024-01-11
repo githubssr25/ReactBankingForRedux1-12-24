@@ -40,24 +40,13 @@ const Login = ({ handleSuccessfulLogin }) => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
-  // login is API log in and this is going to
-  //     const onSuccessfulLogin = () => {
-  //   handleSuccessfulLogin();
-  //   setShowModal(true);
-  // };
-  // login(username, password, onSuccessfulLogin);
-  // //
-  // //
 
-  // so fro mteh store give me the user
   const currentUserState = useSelector((state) => state.user.user);
+  // use selector is how component is tied to redux store. Allows components to subscribe to changes in redux state and be notified when those parts of state(user for login comp) are updated
+
   const { currentUser, isLoggedIn } = currentUserState;
-
-  // root treducer will combine all reducers together so can have multiple states be managed and all be united at one point
   // when we want to create another store how is that store going to know about other stores
-  // so inside of reducers we create a file called root reducer
-
-  // we have log in and dispatch is in app.js
+  // so inside of reducers we create a file called root reducer we have log in and dispatch is in app.js
   useEffect(() => {
     const onSuccessfulLogin = () => {
       handleSuccessfulLogin();
@@ -132,5 +121,4 @@ const Login = ({ handleSuccessfulLogin }) => {
 };
 
 export default Login;
-// default means only thing will be exprted so dont have to use deconstructor
 // so at top its just this now import login from "../../services/api-service";

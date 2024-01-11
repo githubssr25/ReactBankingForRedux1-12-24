@@ -5,40 +5,11 @@ import Stack from "react-bootstrap/Stack";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import { Button } from "react-bootstrap";
-// import { Login } from "../Login/Login";
-// to go up a directory ../ so home.jsx and home.css are at same level nothing esle is in that directory
-// home.jsx needs access to login but not in same directory so has to go up a direcotry to home and then will go to folder called login and then will go to login.jsx
-// so that is what we did .. to go up and then went ot login and then go to the login of the login folder
-
-// STARTING PLACE IS HOME home.jsx
-// have to go up to Home folder
-// home folder is at same level of register account
-// .. go up and then at same place so if you go at home you are going down so ../Home/RegisterAccount wont work
 import Login from "../Login/Login";
 import RegisterAccount from "../RegisterAccount/RegisterAccount";
-// import { RegisterAccount } from "../RegisterAccount/RegisterAccount";
-
-// start from log in you go up a directory to go to login
-
-// this import outlet, link, react router dom allows you to re direct to a diff link
-// import { RegisterAccount } from "../components/RegisterAccount"; so thi sis wrong
-
-// can type in rafce to get this
-
-// anonymous function here that rep a functional component its just react synthax so you are returning this div from a function
-// in past there were functional components that look like this and then
-// there were state components and it looked synthax wise diff but now w react hooks
-// we create everythign in functional component
-// react fragments encapsulates the code, it means that you can return HTML on screen
-//    <>Home</> this is a react fragment
-
-// {{}} are to activate javascript
-// if someone presses log in it shoudl re direct them to a diff page
 
 import Dropdown from "react-bootstrap/Dropdown";
 
-// should have its own file if it can be used in future for someone else to use it another component would wnat to use it he means
-// but if it will only ever be used in this one file ever then it doesnt need its ow ncomponent
 function BasicExample() {
   return (
     <Dropdown>
@@ -236,13 +207,5 @@ const Home = () => {
 //     </div>
 //   );
 // };
-
-// we make component jsx file if we want someone else ot use this component we have to export it
-// so export name of component and export default means this is only thing being exported
-// if you dont export it nobody else can se it and sending it out as an object
-// if somebody else wants to receiver it they ahve to import it and then deconstruct it
-// if they only just want home you woud do import ( home ) from "../Home" for ex(not 100% on htis specifc directory)
-// could do like export (home, welcome} from "../Home"
-// if you want to re use it like entire div and evdrything in function thats how you can do that w export
 
 export default Home;

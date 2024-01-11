@@ -5,16 +5,10 @@ import { registerAccountTest } from "../../services/api-service";
 import { dispatch } from "redux";
 import { registerAccountAxn } from "../../actions/userActions";
 
-// registerAccount.jsx we go up to registerAccount
-// and now at registerAccount in components folder
-// so we have to go up again to get to components and only then we can get into services
-// so go up twice and now can go into servies and you go down by specifying where you wantto go down into
-// so in our case servies/api-service
-
 const RegisterAccount = ({ handleSuccessfulRegister }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isSavings, setSavings] = useState(true); // Default to savings
+  const [isSavings, setSavings] = useState(true);
   useEffect(() => {
     const onSuccessfulRegisterAccount = () => {
       dispatch(registerAccountAxn(account.data));
