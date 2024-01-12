@@ -19,19 +19,19 @@ function BasicExample() {
 
       <Dropdown.Menu>
         <Dropdown.Item href="#/action-1">
-          <Link to="/Login">
+          <Link to="/login">
             {" "}
             <button> Login </button>
           </Link>
         </Dropdown.Item>
         <Dropdown.Item href="#/action-2">
-          <Link to="/registerAccount">
+          <Link to="/register-account">
             {" "}
             <button> Register Account </button>
           </Link>
         </Dropdown.Item>
         <Dropdown.Item href="#/action-3">
-          <Link to="/registerCustomer">
+          <Link to="/register-customer">
             {" "}
             <button> Register Customer </button>
           </Link>

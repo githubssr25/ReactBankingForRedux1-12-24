@@ -20,7 +20,6 @@ const RegisterAccount = ({ handleSuccessfulRegister }) => {
   useEffect(() => {
     const onSuccessfulRegisterAccount = () => {
       dispatch(setBalance(0));
-      dispatch(setAccountType(isSavings ? "savings" : "checking"));
       handleSuccessfulRegister();
     };
     registerAccountTest(username, isSavings, onSuccessfulRegisterAccount);

@@ -1,14 +1,13 @@
 export const ACTIONS = {
-    SET_ACCOUNT_TYPE: 'SET_ACCOUNT_TYPE',
     SET_BALANCE: 'SET_BALANCE',
     REGISTER_ACCOUNT: 'REGISTER_ACCOUNT',
-    REGISTER_SUCCESS: 'REGISTER_SUCCESS',
-    REGISTER_FAILURE: 'REGISTER_FAILURE',
+    HANDLE_ERROR: 'HANDLE_ERROR',
+    GET_ACCOUNTS: 'GET_ACCOUNTS',
   };
-  
-  export const setAccountType = (accountType) => ({
-    type: ACTIONS.SET_ACCOUNT_TYPE,
-    payload: accountType,
+
+  export const getBalance = (balance) => ({
+    type: ACTIONS.GET_BALANCE,
+    payload: balance,
   });
   
   export const setBalance = (balance) => ({
@@ -21,11 +20,7 @@ export const ACTIONS = {
     payload: account,
   });
 
-  export const registerSuccess = () => ({
-    type: ACTIONS.REGISTER_SUCCESS,
-  });
-  
-  export const registerFailure = (error) => ({
-    type: ACTIONS.REGISTER_FAILURE,
+  export const handleError = (error) => ({
+    type: ACTIONS.HANDLE_ERROR,
     payload: error,
-  });
+  })

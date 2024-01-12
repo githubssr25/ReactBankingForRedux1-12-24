@@ -41,7 +41,11 @@ const Login = ({ handleSuccessfulLogin }) => {
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
 
-  const currentUserState = useSelector((state) => state.user.user);
+  const currentUserState = useSelector((state) => state?.user?.user);
+  // in JS state?.user?.user you dont know if htis object is defined or gives you values soyou return null if no value
+  // we dont know if state.user exists so what happens in java is null pter exception in JS they have way to prevent that you put ? before accessing it with . operator
+  // if doesnt exist will return back undefiend immeadiately instead of continuing to try to access it
+
   // use selector is how component is tied to redux store. Allows components to subscribe to changes in redux state and be notified when those parts of state(user for login comp) are updated
 
   const { currentUser, isLoggedIn } = currentUserState;
