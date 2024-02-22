@@ -4,12 +4,9 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import CombinedForm from './components/RegisterCustomer/RegisterCustomer'
-import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import rootReducer from './reducers';
+import store from './stores/store';
 
-const store = createStore(rootReducer);
 
 
 // react strict mode and then have app which has all the browser router and route and stuff in it 
