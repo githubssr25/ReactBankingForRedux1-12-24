@@ -1,59 +1,76 @@
 import React from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Form, Button, Col, Row } from "react-bootstrap";
+import { addCustomer } from "../../slices/userSlice";
+import { Link } from "react-router-dom";
 
 const RegisterCustomer = () => {
-  return (
-    <Form className="register-customer-form">
-      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-        <Form.Label>CustomerID</Form.Label>
-        <Form.Control size="sm" type="text" placeholder="username12" />
-        <Form.Text id="passwordHelpBlock" muted>
-          Your customerID must be 4-10 characters long, contain letters and
-          numbers, and must not contain spaces, special characters, or emoji.
-        </Form.Text>
-      </Form.Group>
-      <FormTextExample />
-    </Form>
-  );
-};
+ 
+  const [customerID, setCustomerID] = useState('');
+  const [pin, setPin] = useState('');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [registrationSuccess, setRegistrationSuccess] = useState(null);
 
-export function FormTextExample() {
-  return (
-    <>
-      <Form.Label htmlFor="inputPassword5">Pin</Form.Label>
-      <Form.Control
-        type="password"
-        id="inputPassword5"
-        aria-describedby="passwordHelpBlock"
-      />
-      <Form.Text id="passwordHelpBlock" muted>
-        Your pin must be 4-10 characters long, contain letters and numbers, and
-        must not contain spaces, special characters, or emoji.
-      </Form.Text>
-    </>
-  );
-}
+  const handleRegisterCustomer = async (customerID, pin) => {
+    try {
+      const actionResult = await dispatch(addCustomer({ customerID, pin }));
+      // Check if the action was fulfilled
+      if (addCustomer.fulfilled.match(actionResult)) {
+        setRegistrationSuccess(true);
+      } else {
+        setRegistrationSuccess(false);
+      }
+    } catch (error) {
+      console.error("Registration failed", error);
+      setRegistrationSuccess(false);
+    }
+  }
 
-const CombinedForm = () => {
   return (
-    <div style={{ textAlign: "left", marginTop: "20px", marginLeft: "20px" }}>
-      <div
-        style={{
-          textAlign: "center",
-          backgroundColor: "#f0f0f0",
-          padding: "10px",
-        }}
-      >
-        <h2>Register a Customer Below</h2>
-      </div>
-      <Row className="justify-content-center">
-        <Col xs={12} sm={6}>
-          <RegisterCustomer />
-          <Button variant="primary">Register Customer</Button>
-        </Col>
-      </Row>
+    <div>
+      <label>
+        Enter your CustomerID. Must contain 4-10 numbers only 
+        <input 
+        type="number"
+        value={customerID}
+        onChange = {(e) => setCustomerID(e.target.value)}
+        />
+      </label>
+      <label>
+        Enter your pin. Must asl contain 4-10 numbers only
+        <input 
+        type ="password"
+        value={pin}
+        onChange = {(e) => setPin(e.target.value)}
+        />
+      </label>
+      <button onClick={() => handleRegisterCustomer(customerID, pin)}> Submit</button>
+      { registrationSuccess !=null && (
+       registrationSuccess ? (
+        <p> Congrats you have registered an account you can click go back to home page and try logging in now</p>
+      ) : (
+        <p> sorry this registration attempt failed please try again and make sure your customerID and pin are both 4-10 digits only</p>
+      ))
+    }
+            <Link to="/home-authenticated">
+            <button>Click here to go back to home page</button>
+          </Link>
     </div>
-  );
+  )
 };
 
-export default CombinedForm;
+export default RegisterCustomer;
+
+  // useEffect(() => {
+//   if (status === 'succeeded') {
+//     setRegistrationSuccess(true);
+//   } else if (status === 'failed') {
+//     setRegistrationSuccess(false);
+//   }
+// }, [status]); // 'status' should be coming from the Redux state
+
+
+ 
