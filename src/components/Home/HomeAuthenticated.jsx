@@ -17,6 +17,9 @@ const HomeAuthenticated = () => {
       const handleRegisterNewBankAccount = async () => {
         navigate('/register-bank-account');
       }
+      const handleGetTransactionHistory = async () => {
+        navigate('/get-transaction-history');
+      }
 
 
 return (
@@ -27,6 +30,7 @@ return (
     <button onClick={handleGetBankAccounts}>Get Bank Accounts</button> 
     <button onClick={handleRegisterNewBankAccount}> Register New Checking Or Savings Bank Account</button>
     <button onClick={handleGetBankAccounts}> Withdraw or Deposit from your account</button>
+    <button onClick={handleGetTransactionHistory}> Get Transaction History</button>
     </div>
     
 </div>

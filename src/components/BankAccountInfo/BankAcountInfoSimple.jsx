@@ -1,11 +1,15 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBankAccounts } from "../../slices/bankAccountSlice";
+import { Link } from "react-router-dom";
 
 const BankAccountInfoSimple = () => {
   const bankAccounts = useSelector((state) => state.bankAccount.bankAccounts);
   const status = useSelector((state) => state.bankAccount.status);
   const error = useSelector((state) => state.bankAccount.error);
+  const customerID = useSelector(
+    (state) => state.currentUser.currentUserCustomerID
+  );
 
 // const initialState = {
 //     bankAccounts: [],
@@ -18,7 +22,7 @@ const BankAccountInfoSimple = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (status === "idle") {
-      dispatch(fetchBankAccounts({customerID: 4510}));
+      dispatch(fetchBankAccounts({customerID: customerID}));
     }
   }, [status]);
 //   so we only want to do this when status is idle 
@@ -35,9 +39,16 @@ const BankAccountInfoSimple = () => {
     <div>
       <ul>
         {bankAccounts.map((bankAccount) => {
-          return <li key = {bankAccount.bankAccountID}> {bankAccount.balance}</li>;
+          return <li key = {bankAccount.bankAccountID}>
+                Bank Account ID: {bankAccount.bankAccountID} <br />
+                Bank Account Type: {bankAccount.bankAccountType} <br />
+                Bank Account Balance: {bankAccount.balance} <br />
+             </li>;
         })}
       </ul>
+      <Link to="/home-authenticated">
+              <button>Click here to go back to home page</button>
+            </Link>
     </div>
   );
 };

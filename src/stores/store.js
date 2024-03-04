@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import bankAccountSlice from '../slices/bankAccountSlice';
 import userSlice from '../slices/userSlice';
+import transactionSlice from '../slices/transactionSlice';
 
 const store = configureStore({
     reducer: {
       bankAccount: bankAccountSlice,
       currentUser: userSlice,
+      transactionState: transactionSlice
     },
  
   });

@@ -13,6 +13,7 @@ import HomeAuthenticated from "./components/Home/HomeAuthenticated";
 import RegisterBankAccount from "./components/RegisterBankAccount/RegisterBankAccount";
 import BankAccountInfoSimple from "./components/BankAccountInfo/BankAcountInfoSimple";
 import BankAccountInfo from "./components/BankAccountInfo/BankAccountInfo";
+import ObtainTransactionHistory from "./components/BankAccountInfo/TransactionsSimple/GetTransactionHistory";
 
 // we need a provider have to surround whole browser router w provider so every component has access to global store data 
 // provider needs to know about store 
@@ -28,9 +29,10 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+          <Route path="/get-transaction-history" element={<ObtainTransactionHistory />} />
           <Route path="/register-account" element={<RegisterAccount />} />
           <Route path="/register-customer" element={<RegisterCustomer />} />
-          <Route path="/view-accounts" element={<BankAccountInfoSimple />} />
+          <Route path="/view-accounts" element={<BankAccountInfo />} />
           <Route path="*" element={<HomeUnauthenticated />} />
           <Route path="/home-unauthenticated" element ={<HomeUnauthenticated/>} />
           <Route path="/home-authenticated" element ={<HomeAuthenticated/>} />
