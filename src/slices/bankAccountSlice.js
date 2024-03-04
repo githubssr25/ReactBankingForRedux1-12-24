@@ -6,23 +6,26 @@ const initialState = {
     error: null,
     bankAccountsObtained: false
 };
-
+axios.defaults.baseURL = "http://localhost:9000/api";
 // these are extra reducers. 
+// axios default bae URL just set that to localhost:9000 for all these to save time 
+
 export const fetchBankAccounts = createAsyncThunk('bankAccounts/fetchBankAccounts', async ({customerID}) => {
     try {
       // console.log("are we getting into fetchBankAccounts right before API call in slice");
       // console.log("what is customerID in the call", customerID);
-        const response = await axios.get(`http://localhost:9000/api/bank-account/find-bank-account-by-customer-id/${customerID}`);
+        const response = await axios.get(`/bank-account/find-bank-account-by-customer-id/${customerID}`);
         // console.log("are we even getting response back from fetchbankaccounts in the slice", response.data);
         return response.data;
     } catch (error){
+      // return rejectWithValue instead of throwing error and that return value will be received in payload at bottom of extra reducers 
         throw error;
     }
 });
 
 export const addBankAccounts = createAsyncThunk('bankAccounts/addBankAccounts', async ({customerID, isSavings}) => {
     try {
-        const response =  await axios.post("http://localhost:9000/api/bank-account/addAccount", {customerID: customerID, isSavings: isSavings});
+        const response =  await axios.post("/bank-account/addAccount", {customerID: customerID, isSavings: isSavings});
         if(response.status !== 200){
             throw new Error(response.statusText);
             // so after you throw this line 23 catches it 
@@ -30,8 +33,8 @@ export const addBankAccounts = createAsyncThunk('bankAccounts/addBankAccounts', 
     return response.data;
     } catch (error){
         throw error;
+        // so we are going to return 
         // thrown donw here means that outside code that called it will crash and asynch code will be able to receive an error that went bad because asynch code exists to catch ahd handle errors thats why we had to throw it 
-
     }
 });
 // 
@@ -43,8 +46,8 @@ export const updateBankAccounts = createAsyncThunk('bankAccounts/updateBankAccou
   };
     try {
         const endpoint = amount1 < 0
-        ? `http://localhost:9000/api/bank-account/balance/${bankAccountID}/withdraw/`
-        : `http://localhost:9000/api/bank-account/balance/${bankAccountID}/deposit/`;
+        ? `/bank-account/balance/${bankAccountID}/withdraw/`
+        : `/bank-account/balance/${bankAccountID}/deposit/`;
         const response =  await axios.put(endpoint, amountDTO);
         console.log("what is response.data right after we do update call and return it back", response.data);
             // Access the current state using getState and log it
@@ -56,7 +59,7 @@ export const updateBankAccounts = createAsyncThunk('bankAccounts/updateBankAccou
             errorCode: response.data.errorCode,
             errorType: response.data.errorType,
             message: response.data.message,
-            bankAccountID: bankAccountID || 'defaultID',
+            // bankAccountID: bankAccountID || 'defaultID',
           })
         } else {
           return { ...response.data, bankAccountID };
@@ -68,7 +71,7 @@ export const updateBankAccounts = createAsyncThunk('bankAccounts/updateBankAccou
       if(!error.response){
         return thunkAPI.rejectWithValue({
           message: 'Network or non server related error',
-          bankAccountID: bankAccountID || 'defaultID',
+          // bankAccountID: bankAccountID || 'defaultID',
         })
       } else {
         return thunkAPI.rejectWithValue({
@@ -76,7 +79,7 @@ export const updateBankAccounts = createAsyncThunk('bankAccounts/updateBankAccou
           errorType: error.response.data.errorType,
           message: error.response.data.message,
           // Include bankAccountID or a default value
-          bankAccountID: bankAccountID || 'defaultID',
+          // bankAccountID: bankAccountID || 'defaultID',
         });
 
       }
@@ -116,6 +119,7 @@ export const bankAccountSlice = createSlice({
           state.status = 'succeeded';
         })
         .addCase(fetchBankAccounts.rejected, (state, action) => {
+          // not using action.payload so we dont have access to error to store in state 
             state.status = 'failed';
           })
         .addCase(addBankAccounts.pending, (state, action) => {
@@ -137,6 +141,7 @@ export const bankAccountSlice = createSlice({
         })
         .addCase(updateBankAccounts.fulfilled, (state, action) => {
           const { bankAccountID, amount, balance} = action.payload;
+          console.log("what is action and action payload right now for successful withdrawdeposit", action, action.payload);
             // Assuming the API returns the updated account details
             const index = state.bankAccounts.findIndex(bankAccount => bankAccount.bankAccountID === Number(action.payload.bankAccountID));
             if (index !== -1) {
@@ -152,24 +157,33 @@ export const bankAccountSlice = createSlice({
           .addCase(updateBankAccounts.rejected, (state, action) => {
             console.log('Rejected action:', action);
             state.status = 'failed';
-            if(action.error && action.error.message){
-              console.log("what are action.error and action.error.message", action.error, action.error.message);
-              state.error = action.error.message
-            }
-            if(action.payload && action.payload.data){
-              // / Assuming the error details are in action.payload.da
-              console.log("what are action.paylod and action.payload.data in our error for withdraw/deposit extrareducer", action.payload, action.payload.data);
-            const { errorCode, errorType, message } = action.payload.data;
-            state.error = {errorCode, errorType, message };
-            // Store the structured error information
-            }
+            if (action.payload) {
+              console.log("action and Action payload in our error for withdraw/deposit extrareducer", action, action.payload);
+              const { errorCode, errorType, message } = action.payload;
+              state.error = { errorCode, errorType, message };
+              // state.bankAccount.error = { errorCode, errorType, message };
+              // console.log("Is state.bankAccount.error actually the errorCode, errorType, message we want?", state.bankAccount.error);
+              console.log("Is state.error actually the errorCode, errorType, message we want?", state.error);
+              console.log("display state and state.error", state, state.error);
+              // state.error line 156 that state is initial state it refers to up at top 
+              // const initialState = {
+    // bankAccounts: [],
+    // status: "idle",
+    // error: null,
+    // so referring to this state 
+          } else if (action.error && action.error.message) {
+            console.log("Action.error and action.error.message", action.error, action.error.message);
+            state.error = action.error.message;
+        }
           });
       }
 
   });
   
-  export const { addBankAccount, removeLanguage, getBankAccounts } = bankAccountSlice.actions;
+  // export const { addBankAccount, removeLanguage, getBankAccounts } = bankAccountSlice.actions;
   export default bankAccountSlice.reducer;
+
+
 
 
     //   extraRed listen for actions dispatched by async thunks and update the state accordingly. For instance, when fetchBankAccounts.fulfilled is dispatched after 

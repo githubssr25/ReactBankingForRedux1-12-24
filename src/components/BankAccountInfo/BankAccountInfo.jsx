@@ -22,6 +22,7 @@ const BankAccountInfo = () => {
   const customerID = useSelector(
     (state) => state.currentUser.currentUserCustomerID
   );
+  const bankAccountError = useSelector(state => state.bankAccount.error);
   console.log("what is cusotmerId value from the use selector", customerID);
 
   const [amount, setAmount] = useState(null);
@@ -30,6 +31,7 @@ const BankAccountInfo = () => {
   const [transactionSuccess, setTransactionSuccess] = useState(null);
   const [transactionBalance, setTransactionBalance] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [triggerWithdrawDeposit, setTriggerWithdrawDeposit] = useState(null);
 
   // refer to line 4 and 53 for name this gets us data so what do we want to do with it? we just make simple para tag
   // where is data we are trying to use regarding useSelector
@@ -47,7 +49,22 @@ const BankAccountInfo = () => {
     }
   }, [transactionSuccess]); // This effect depends on transactionSuccess state
 
+  useEffect(() => {
+    if(triggerWithdrawDeposit){
+      performWithdrawDepositLogic();
+    }
+  }, [triggerWithdrawDeposit]);
+
+  useEffect(() => {
+    // If there's an error in the bankAccount slice, update the local state
+    if (bankAccountError) {
+   const { errorCode, errorType, message } = bankAccountError;
+   setErrorMessage(`Error: ${errorType}, Message: ${message}`);
+    }
+  }, [bankAccountError]);
+
   const performFetchBankAccounts = async () => {
+    console.log("performFetchBankAccounts is called");
     console.log(
       "what is bankAccoutns from use selector before making dispatch call and entireState",
       bankAccounts,
@@ -65,11 +82,18 @@ const BankAccountInfo = () => {
   };
 
   const performWithdrawOrDeposit = async (amount, chosenBankAccountID) => {
-    if (bankAccounts == null) {
-      performFetchBankAccounts();
+    if (bankAccounts.length === 0) {
+      console.log("are we even entering the !bankAccounts part of performwithdrwaeordeposit loop"); 
+    await performFetchBankAccounts();
+    setTriggerWithdrawDeposit(true);
+    //  have to add this await part 
+    } else {
+      performWithdrawDepositLogic();
     }
     setTransactionSuccess(null);
     console.log("what is value of bankaccounts", bankAccounts);
+  }
+  const performWithdrawDepositLogic = async () => {
     const balanceVal = findBalance(chosenBankAccountID);
      // Check if balanceVal is null, indicating an invalid account ID was entered
   if (balanceVal === -9999) {
@@ -89,12 +113,14 @@ const BankAccountInfo = () => {
           "what is response.payload in perform withdraw or deposit",
           response.payload
         );
+        console.log("what is the response right now not response.payload", response);
         const { balance } = response.payload;
         setTransactionBalance(balance);
         // const {amount, balance} = response.payload;
         // setTransactionBalance(balance);
         setTransactionSuccess(true);
       } else if (updateBankAccounts.rejected.match(response)) {
+        
         setTransactionSuccess(false);
       } else {
         setTransactionSuccess(false);
@@ -180,9 +206,9 @@ const BankAccountInfo = () => {
               type="number"
               value={amount}
               onChange={(e) => {
-                const enteredAmount = e.target.value;
+                const enteredAmount = Number(e.target.value);
                 setAmount(
-                  withdrawTrueOrFalse ? enteredAmount * -1 : enteredAmount
+                  withdrawTrueOrFalse ? -Math.abs(enteredAmount) : enteredAmount
                 );
               }}
             />
@@ -208,6 +234,10 @@ const BankAccountInfo = () => {
         { errorMessage == "Invalid bank account ID. Please check and try again." && (
           <p> you have entered an invalid bank accountID please check your existing accounts and try again</p>
         )
+         }
+         {bankAccountError && (
+          <p> Sorry transaction could not complete with the following error: {errorMessage} </p>
+         )
          }
         {transactionSuccess != null &&
           (transactionSuccess ? (
@@ -235,3 +265,25 @@ export default BankAccountInfo;
 // dispatch(fetchBankAccounts({customerID: 2774}));
 // If you want to fetch bank accounts only when the component loads and not on every re-render, placing your dispatch(fetchBankAccounts({customerID: 2774})); call inside a useEffect with an
 // empty dependency array ([]) is the correct approach. This ensures that the data fetching occurs only once. If the data fetching should happen under different circumstances (e.g., in response to a user action), you might consider calling dispatch directly in an event handler function instead of using useEffect.
+
+
+
+
+
+// why you needed Math.abs for this 
+//           value={amount}
+// onChange={(e) => {
+//   const enteredAmount = Number(e.target.value);
+//   setAmount(
+//     withdrawTrueOrFalse ? -Math.abs(enteredAmount) : enteredAmount
+//   );
+// }}
+// Without Math.abs, if the enteredAmount was already negative (e.g., if a user types a negative number into the input), then the expression enteredAmount * -1 would actually make it positive when the withdrawTrueOrFalse was true, which is the opposite of what you wanted for a withdrawal. This could have led to the inconsistent behavior you observed.
+// By using Math.abs(enteredAmount), you eliminate the possibility of a user-entered negative number affecting the logic. The withdrawTrueOrFalse state then correctly dictates whether the number should be made negative (for withdrawals) or kept positive (for deposits).
+
+// Here's a step-by-step of what happens with Math.abs:
+
+// User enters an amount (positive or negative).
+// Math.abs(enteredAmount) converts any number to its absolute value, which is always positive.
+// If withdrawTrueOrFalse is true, the ternary operator applies a negative sign, making it suitable for a withdrawal operation.
+// If withdrawTrueOrFalse is false, the ternary operator keeps it positive, suitable for a deposit operation.

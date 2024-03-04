@@ -6,11 +6,13 @@ import RegisterAccount from "./components/RegisterAccount/RegisterAccount";
 import RegisterCustomer from "./components/RegisterCustomer/RegisterCustomer";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NoPage from "./components/NoPage/NoPage";
-import BankAccountInfo from "./components/BankAccountInfo/BankAccountInfo";
+// import BankAccountInfo from "./components/BankAccountInfo/BankAccountInfo";
 import HomeUnauthenticated from "./components/Home/homeUnauthenticated";
 import { useSelector } from "react-redux";
 import HomeAuthenticated from "./components/Home/HomeAuthenticated";
 import RegisterBankAccount from "./components/RegisterBankAccount/RegisterBankAccount";
+import BankAccountInfoSimple from "./components/BankAccountInfo/BankAcountInfoSimple";
+import BankAccountInfo from "./components/BankAccountInfo/BankAccountInfo";
 
 // we need a provider have to surround whole browser router w provider so every component has access to global store data 
 // provider needs to know about store 
@@ -28,7 +30,7 @@ function App() {
         <Routes>
           <Route path="/register-account" element={<RegisterAccount />} />
           <Route path="/register-customer" element={<RegisterCustomer />} />
-          <Route path="/view-accounts" element={<BankAccountInfo />} />
+          <Route path="/view-accounts" element={<BankAccountInfoSimple />} />
           <Route path="*" element={<HomeUnauthenticated />} />
           <Route path="/home-unauthenticated" element ={<HomeUnauthenticated/>} />
           <Route path="/home-authenticated" element ={<HomeAuthenticated/>} />
