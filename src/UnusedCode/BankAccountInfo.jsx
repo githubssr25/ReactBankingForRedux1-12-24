@@ -4,8 +4,8 @@ import {
   getBankAccounts,
   fetchBankAccounts,
   updateBankAccounts,
-} from "../../slices/bankAccountSlice";
-import { userSlice } from "../../slices/userSlice";
+} from "../slices/bankAccountSlice";
+import { userSlice } from "../slices/userSlice";
 import { Link } from "react-router-dom";
 
 // have to dispatch the actions

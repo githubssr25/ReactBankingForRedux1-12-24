@@ -12,8 +12,11 @@ import { useSelector } from "react-redux";
 import HomeAuthenticated from "./components/Home/HomeAuthenticated";
 import RegisterBankAccount from "./components/RegisterBankAccount/RegisterBankAccount";
 import BankAccountInfoSimple from "./components/BankAccountInfo/BankAcountInfoSimple";
-import BankAccountInfo from "./components/BankAccountInfo/BankAccountInfo";
-import ObtainTransactionHistory from "./components/BankAccountInfo/TransactionsSimple/GetTransactionHistory";
+import BankAccountInfo from "./UnusedCode/BankAccountInfo";
+import ObtainTransactionHistory from "./components/TransactionsSimple/GetTransactionHistory";
+import InitiateTransaction from "./components/TransactionsSimple/InitiateTransactionSimple";
+import WithdrawDeposit from "./components/BankAccountInfo/WithdrawDeposit";
+import PendingTransactions from "./components/TransactionsSimple/PendingTransactions";
 
 // we need a provider have to surround whole browser router w provider so every component has access to global store data 
 // provider needs to know about store 
@@ -23,16 +26,21 @@ import ObtainTransactionHistory from "./components/BankAccountInfo/TransactionsS
 {/* <Route index element={<Home />} /> */}
           {/* <Route path="/login" element={<Login />} /> */}
 
+          //           <Route path="/view-accounts" element={<BankAccountInfo />} />
+
 function App() {
   console.log('Setting up routes');
   return (
     <>
       <BrowserRouter>
         <Routes>
+          <Route path="/initiate-transaction" element={<InitiateTransaction />} />
+          <Route path="/pending-transactions" element ={<PendingTransactions/>} />
           <Route path="/get-transaction-history" element={<ObtainTransactionHistory />} />
           <Route path="/register-account" element={<RegisterAccount />} />
           <Route path="/register-customer" element={<RegisterCustomer />} />
-          <Route path="/view-accounts" element={<BankAccountInfo />} />
+          <Route path="/withdraw-deposit" element={<WithdrawDeposit />} />
+          <Route path="/simple-account-info" element={<BankAccountInfoSimple />} />
           <Route path="*" element={<HomeUnauthenticated />} />
           <Route path="/home-unauthenticated" element ={<HomeUnauthenticated/>} />
           <Route path="/home-authenticated" element ={<HomeAuthenticated/>} />

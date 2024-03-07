@@ -101,8 +101,9 @@ export const bankAccountSlice = createSlice({
         // console.log("do we ever get into here the bankAccount reducer the plain one as part of get accounts");
       },
       updateBankAccounts: (state, action) => {
+        const { bankAccountID, balance } = action.payload;
        const index = state.bankAccounts.findIndex(bankAccount => bankAccount.bankAccountID === action.payload.bankAccountID);
-       state.bankAccounts[index] = { ...state.bankAccounts[index], ...action.payload };
+       state.bankAccounts[index].balance = balance;
       },
     },
     //           state.bankAccounts = action.payload; dont need this for pending or rejected we dont have data we wont know what payload is only will know when fulfilled 

@@ -11,7 +11,7 @@ const HomeAuthenticated = () => {
 
 
     const handleGetBankAccounts = async () => {
-        navigate('/view-accounts');
+        navigate('/withdraw-deposit');
       }
     
       const handleRegisterNewBankAccount = async () => {
@@ -19,6 +19,17 @@ const HomeAuthenticated = () => {
       }
       const handleGetTransactionHistory = async () => {
         navigate('/get-transaction-history');
+      }
+
+      const simpleBankAccountInfo = async () => {
+        navigate('/simple-account-info');
+      }
+      const initiateTransaction = async () => {
+        navigate('/initiate-transaction');
+      }
+
+      const pendingTransactions = async () => {
+        navigate('/pending-transactions');
       }
 
 
@@ -31,6 +42,9 @@ return (
     <button onClick={handleRegisterNewBankAccount}> Register New Checking Or Savings Bank Account</button>
     <button onClick={handleGetBankAccounts}> Withdraw or Deposit from your account</button>
     <button onClick={handleGetTransactionHistory}> Get Transaction History</button>
+    <button onclick={simpleBankAccountInfo}> Get Simple Bank Account Info</button>
+    <button onClick={initiateTransaction}> Initiate Transaction With Another Account</button>
+    <button onClick={pendingTransactions}> Click Here to Manage Any Pending Transactions</button>
     </div>
     
 </div>
