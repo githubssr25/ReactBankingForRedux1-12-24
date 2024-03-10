@@ -8,9 +8,13 @@ const HomeAuthenticated = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     console.log("how many times is HomeAuthenticated getting renderengd purposes");
+    const customerID = useSelector(
+      (state) => state.currentUser.currentUserCustomerID
+    );
+    console.log("what is customerID", customerID);
 
 
-    const handleGetBankAccounts = async () => {
+    const handleWithdrawDeposit = async () => {
         navigate('/withdraw-deposit');
       }
     
@@ -38,11 +42,10 @@ return (
      <h1>Congrats! You have logged in</h1>
     <p>Pick which option you would like:</p>
     <div>
-    <button onClick={handleGetBankAccounts}>Get Bank Accounts</button> 
     <button onClick={handleRegisterNewBankAccount}> Register New Checking Or Savings Bank Account</button>
-    <button onClick={handleGetBankAccounts}> Withdraw or Deposit from your account</button>
+    <button onClick={handleWithdrawDeposit}> Withdraw or Deposit from your account</button>
     <button onClick={handleGetTransactionHistory}> Get Transaction History</button>
-    <button onclick={simpleBankAccountInfo}> Get Simple Bank Account Info</button>
+    <button onclick={simpleBankAccountInfo}> Get Bank Account Info</button>
     <button onClick={initiateTransaction}> Initiate Transaction With Another Account</button>
     <button onClick={pendingTransactions}> Click Here to Manage Any Pending Transactions</button>
     </div>

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getBankAccounts,
   fetchBankAccounts,
-  updateBankAccounts,
+  updateBankAccountsThunk,
 } from "../../slices/bankAccountSlice";
 import { userSlice } from "../../slices/userSlice";
 import { Link } from "react-router-dom";
@@ -32,9 +32,9 @@ const WithdrawDeposit = () => {
     setAmount(transactionAmount);
     const balanceVal = findBalance(indBankAccountID);
     try {
-      const response = await dispatch(updateBankAccounts({bankAccountID: indBankAccountID, amount1: transactionAmount, balance1: balanceVal}));
+      const response = await dispatch(updateBankAccountsThunk({bankAccountID: indBankAccountID, amount1: transactionAmount, balance1: balanceVal}));
       console.log("what is response and response.payload", response, response.payload);
-      if(updateBankAccounts.fulfilled.match(response)) {
+      if(updateBankAccountsThunk.fulfilled.match(response)) {
         console.log(
           "what is response.payload in perform withdraw or deposit",
           response.payload
@@ -43,7 +43,7 @@ const WithdrawDeposit = () => {
         const {balance, amount} = response.payload;
         setRemainingBalance(balance);
       setSuccessfulDepositWithdraw(true);
-      } else if(updateBankAccounts.rejected.match(response)) {
+      } else if(updateBankAccountsThunk.rejected.match(response)) {
         console.log("what is response.payload if we get error in withdrawdeposit", response.payload);
         const {errorCode, errorType} = response.payload;
         setErrorMessage(errorType);

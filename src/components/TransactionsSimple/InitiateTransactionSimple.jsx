@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getBankAccounts,
+  getBankAccountsThunk,
   fetchBankAccounts,
-  updateBankAccounts,
 } from "../../slices/bankAccountSlice";
 import { initiateTransaction } from "../../slices/transactionSlice";
 import { userSlice } from "../../slices/userSlice";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import status from "../../status/status";
+import bankAccountSlice from "../../slices/bankAccountSlice";
 
 const InitiateTransaction = () => {
   const dispatch = useDispatch();
@@ -20,16 +21,31 @@ const InitiateTransaction = () => {
   const [bankAccountReceivingID, setBankAccountReceivingID] = useState(null);
   const [successfulTransaction, setSuccessfulTransaction] = useState(null);
   const [responseStatus, setResponseStatus] = useState(null);
+  const [balance, setBalance] = useState(null);
+  const entireState = useSelector((state) => state);
   const customerID = useSelector(
     (state) => state.currentUser.currentUserCustomerID
   );
+  const statusState = useSelector((state) => state.transactionState.status)
   const error = useSelector((state) => state.transactionState.error);
   const bankAccounts = useSelector((state) => state.bankAccount.bankAccounts);
   const [remainingBalance, setRemainingBalance] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchBankAccounts({ customerID: customerID }));
-  }, [dispatch]);
+    
+    dispatch(fetchBankAccounts({customerID: customerID}));
+  }, []);
+
+  useEffect(() => {
+ if(statusState === status.SUCCEEDED && balance !== null){
+  dispatch(bankAccountSlice.actions.updateBankAccounts({ bankAccountID: bankAccountSendingID,
+    balance: balance}));
+  // fill this out later 
+ }
+  }, [statusState, balance])
+  // change in status can put if cond that change based on certain things like if status = pending etc when status is changing can have if statement that deal w that status
+  // when stauts is equal to these values then can go ahead dispatch tehse things can also make an asynch callback function to dispatch some kidn fo thunk async
+
 
   const toggleBankAccountInfo = () => {
     setShowBankInfo(!showBankInfo);
@@ -44,17 +60,20 @@ const InitiateTransaction = () => {
           transactionAmount,
         })
       );
-      const { data, status } = response.payload;
-      setResponseStatus(status);
+      const { data, statusCode, status } = response.payload;
+      console.log("print our response payload see status right after response send transaction", response.payload); 
+      setResponseStatus(statusCode);
       setSuccessfulTransaction(true);
-      const balance = data.balance;
-      setRemainingBalance(balance);
+      setRemainingBalance(data.balance);
+      setBalance(data.balance);
     } catch (error) {
       setSuccessfulTransaction(false);
       console.error("transaction initiation failed");
     }
   };
 
+  console.log("print entire state right before return in initiateTransaction", entireState);
+  console.log("what is response status", responseStatus, "and successful transaction value", successfulTransaction);
   return (
     <div>
       <Link to="/home-authenticated">
@@ -110,7 +129,7 @@ const InitiateTransaction = () => {
           </label>
           {transactionType === "send"
             ? "Enter the bankAccountID of the customer you will be sending $$ to"
-            : "Enter the BankAccountID of the customer you are requesting to send $$ from"}
+            : "Enter the bankAccountID of your account you are requesting $$ to be sent to"}
           <label>
             <input
               type="number"
@@ -120,8 +139,8 @@ const InitiateTransaction = () => {
           </label>
           <label>
             {transactionType === "request"
-              ? "Enter the bankAccountID of your account you are requesting $$ to"
-              : "Enter the BankAccountID of your account you are sending $$ from"}
+              ? "Enter the BankAccountID of the customer you are requesting $$ from"
+              : "enter the bankAccountId of your account you are sending $$ to"}
             <input
               type="number"
               id="sendingID"

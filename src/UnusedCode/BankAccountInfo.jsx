@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getBankAccounts,
   fetchBankAccounts,
-  updateBankAccounts,
+  updateBankAccountsThunk,
 } from "../slices/bankAccountSlice";
 import { userSlice } from "../slices/userSlice";
 import { Link } from "react-router-dom";
@@ -101,14 +101,14 @@ const BankAccountInfo = () => {
   }
     try {
       const response = await dispatch(
-        updateBankAccounts({
+        updateBankAccountsThunk({
           bankAccountID: chosenBankAccountID,
           amount1: amount,
           balance1: balanceVal,
         })
       );
       console.log("what is state right after withdraw deposit", entireState);
-      if (updateBankAccounts.fulfilled.match(response)) {
+      if (updateBankAccountsThunk.fulfilled.match(response)) {
         console.log(
           "what is response.payload in perform withdraw or deposit",
           response.payload
@@ -119,7 +119,7 @@ const BankAccountInfo = () => {
         // const {amount, balance} = response.payload;
         // setTransactionBalance(balance);
         setTransactionSuccess(true);
-      } else if (updateBankAccounts.rejected.match(response)) {
+      } else if (updateBankAccountsThunk.rejected.match(response)) {
         
         setTransactionSuccess(false);
       } else {

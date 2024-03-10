@@ -5,7 +5,7 @@ import transactionSlice from '../slices/transactionSlice';
 
 const store = configureStore({
     reducer: {
-      bankAccount: bankAccountSlice,
+      bankAccount: bankAccountSlice.reducer,
       currentUser: userSlice,
       transactionState: transactionSlice
     },

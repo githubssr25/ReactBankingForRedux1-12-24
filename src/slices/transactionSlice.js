@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from "axios";
-import { updateBankAccounts } from './bankAccountSlice';
-
+import { updateBankAccountsThunk } from './bankAccountSlice';
+import status from '../status/status';
 
 const initialState = {
 transactionHistory: {},
 anyPending: false,
-status: "idle",
+status: status.IDLE, // in-progress, completed, reject, pending, in-progress = being done pending = in waiting state doesnt mean were doing anything yet
 error: null,
 pendingTransactions: [],
 successMessage: null,
@@ -61,10 +61,6 @@ async ({customerID}) => {
 //   }
 // }
 
-// 3-5 pick up tomorrow we have ot figure out how to properly update the balance statei n bankaccounts through this transaction
-// we have to basically call the bankaccount slice from within this slice to do so also keep in mind we only return amount and balance not bankacocuntID which makes it tough
-
-
 export const initiateTransaction = createAsyncThunk (
 'transaction/initiateTransaction',
 async({bankAccountSendingID, bankAccountReceivingID, transactionAmount}, thunkAPI) => {
@@ -78,6 +74,8 @@ async({bankAccountSendingID, bankAccountReceivingID, transactionAmount}, thunkAP
       const response = await axios.post(endpoint, TransactionDTO);
       const currentState = thunkAPI.getState();
       console.log("Current state after response:", currentState);
+// instead of (if response.status == 200) 
+
 
       if(response.status == 200){
       console.log("what is our response.data and response and response.status after getting response in initateTrans", response.data, response, response.status);
@@ -91,13 +89,11 @@ async({bankAccountSendingID, bankAccountReceivingID, transactionAmount}, thunkAP
       //   bankAccountID: bankAccountReceivingID,
       //   balance: receivingBalanceToSend
       // }));
-      thunkAPI.dispatch(updateBankAccounts({
-        bankAccountID: bankAccountSendingID,
-        balance: balance
-      }))
-      return { data: response.data, status: response.status };
+      return { data: response.data, statusCode: response.status, status: status.SUCCEEDED };
+      // thsi will be accessed through payload 
       } else if(response.status == 201){
-        return { data: response.data, status: response.status };
+        return { data: response.data, statusCode: response.status, status: status.PENDING };
+        
       }
     } catch(error){
         console.error(error);
@@ -110,6 +106,7 @@ async({bankAccountSendingID, bankAccountReceivingID, transactionAmount}, thunkAP
             return thunkAPI.rejectWithValue({
                 errorCode: error.response.status,
                 message: error.response.data.comments,
+                status: status.REJECTED
             })
           }
         
@@ -159,7 +156,7 @@ state.status = 'pending';
 }) 
 .addCase(initiateTransaction.fulfilled, (state, action) => {
   const { status, data} = action.payload;
-  state.status = 'succeeded';
+  state.status = status;
 })
 .addCase(getPendingTransactionHistory.rejected, (state, action) => {
   state.status = 'failed';

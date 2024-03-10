@@ -1,0 +1,10 @@
+
+const status = {
+SUCCEEDED: 'SUCCEEDED', 
+REJECTED: 'REJECTED',
+PENDING: 'PENDING',
+IN_PROGRESS: 'IN_PROGRESS',
+IDLE: 'IDLE'
+}
+
+export default status;

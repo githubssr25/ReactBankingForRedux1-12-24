@@ -39,7 +39,7 @@ export const addBankAccounts = createAsyncThunk('bankAccounts/addBankAccounts', 
 });
 // 
 
-export const updateBankAccounts = createAsyncThunk('bankAccounts/updateBankAccounts', async ({bankAccountID, amount1, balance1}, thunkAPI) => {
+export const updateBankAccountsThunk = createAsyncThunk('bankAccounts/updateBankAccounts', async ({bankAccountID, amount1, balance1}, thunkAPI) => {
   const amountDTO = {
     amount: amount1,// Parse as an integer
     balance: balance1, // Parse as an integer
@@ -89,7 +89,8 @@ export const updateBankAccounts = createAsyncThunk('bankAccounts/updateBankAccou
 });
 
 // these are reducers line 55-65 and extra reducers we are doing at top 2-17 those are dealing w fetches and stuff 
-export const bankAccountSlice = createSlice({
+// so cant export this line 93 and line 185 
+const bankAccountSlice = createSlice({
     name: 'bankAccount',
     initialState,
     reducers: {
@@ -100,9 +101,11 @@ export const bankAccountSlice = createSlice({
         state.bankAccounts = action.payload;
         // console.log("do we ever get into here the bankAccount reducer the plain one as part of get accounts");
       },
+      // was same name as line 42 so when it was picking which one export line 42 or line 185 it picked the line 42 was more specific so it had precedence IMPORTANT 3-8
       updateBankAccounts: (state, action) => {
-        const { bankAccountID, balance } = action.payload;
-       const index = state.bankAccounts.findIndex(bankAccount => bankAccount.bankAccountID === action.payload.bankAccountID);
+        const { bankAccountID, balance } = action.payload; // Use bankAccountID directly
+        const numericBankAccountID = Number(bankAccountID); // Convert to number
+       const index = state.bankAccounts.findIndex(bankAccount => bankAccount.bankAccountID === numericBankAccountID);
        state.bankAccounts[index].balance = balance;
       },
     },
@@ -140,7 +143,7 @@ export const bankAccountSlice = createSlice({
         .addCase(addBankAccounts.rejected, (state, action) => {
           state.status = 'failed';
         })
-        .addCase(updateBankAccounts.fulfilled, (state, action) => {
+        .addCase(updateBankAccountsThunk.fulfilled, (state, action) => {
           const { bankAccountID, amount, balance} = action.payload;
           console.log("what is action and action payload right now for successful withdrawdeposit", action, action.payload);
             // Assuming the API returns the updated account details
@@ -152,10 +155,10 @@ export const bankAccountSlice = createSlice({
             state.status = 'succeeded';
           })
           // Add cases for pending and rejected states for each thunk as needed
-          .addCase(updateBankAccounts.pending, (state) => {
+          .addCase(updateBankAccountsThunk.pending, (state) => {
             state.status = 'loading';
           })
-          .addCase(updateBankAccounts.rejected, (state, action) => {
+          .addCase(updateBankAccountsThunk.rejected, (state, action) => {
             console.log('Rejected action:', action);
             state.status = 'failed';
             if (action.payload) {
@@ -182,7 +185,11 @@ export const bankAccountSlice = createSlice({
   });
   
   // export const { addBankAccount, removeLanguage, getBankAccounts } = bankAccountSlice.actions;
-  export default bankAccountSlice.reducer;
+  export default bankAccountSlice
+  // line 185 conflict w line 42 
+  // export const updateBankAccounts = createAsyncThunk('bankAccounts/updateBankAccounts', async (
+    // they have same name bankAccountSlice.reducer will get all reducer function names under bankAccountSlice under bankAccountSlice.reducer
+    // and already have asyunk thunk w same name 
 
 
 
