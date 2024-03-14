@@ -40,7 +40,12 @@ async ({customerID}) => {
         const response = await axios.get(`http://localhost:9000/api/transaction/pending-transaction-history-by-customer/${customerID}`);
         // console.log(typeof response === 'object' && response !== null ? 'Response is an object' : 'Response is not an object');
         // console.log(response.data);
-        return response.data;
+        console.log("what is response.data for pendingTransactions", response.data);
+        const makeAcceptedNull = response.data.map(transaction => ({
+          ...transaction,
+          accepted: transaction.accepted ? true : null,
+        }));
+        return makeAcceptedNull;
       } catch(error){
         console.error(error);
         throw error;
@@ -112,6 +117,19 @@ async({bankAccountSendingID, bankAccountReceivingID, transactionAmount}, thunkAP
         
 }});
 
+export const updatePendingTransactions = createAsyncThunk (
+'transaction/updatePendingTransaction',
+async({pendingList, customerID}) => {
+try {
+  console.log("are we getting to the getUpdatePendingService part of api-service to update the pending and what is pendingList", pendingList);
+  const response = await axios.put(`http://localhost:9000/api/transaction/process-pending-transaction/${customerID}`, pendingList);
+  console.log("what is our response from updatePendingTransaction for response and response.data", response, response.data);
+  return response.data;
+} catch (error) {
+  console.error(error);
+  // Handle error appropriately, if needed
+}});
+
 
 export const transactionSlice = createSlice({
 name: 'transactionState',
@@ -166,6 +184,18 @@ state.status ='pending';
 })
 .addCase(getPendingTransactionHistory.fulfilled, (state, action) => {
   state.pendingTransactions = action.payload;
+})
+.addCase(updatePendingTransactions.pending, (state, action) => {
+  state.status = 'pending';
+})
+.addCase(updatePendingTransactions.fulfilled, (state, action) => {
+  const transactionIDRemove = action.payload;
+  state.pendingTransactions = state.pendingTransactions.filter(transaction => 
+    transaction.transactionID != transactionIDRemove);
+  state.status = 'succeded';
+})
+.addCase(updatePendingTransactions.rejected, (state, action) => {
+  state.status= 'failed';
 })
 }
 });
